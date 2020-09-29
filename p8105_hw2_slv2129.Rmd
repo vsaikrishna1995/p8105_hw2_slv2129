@@ -1,0 +1,16 @@
+---
+title: "Homework 2"
+author: "Krishna Vemulapalli"
+date: "28/09/2020"
+output: github_document
+---
+
+```{r setup}
+library(tidyverse)
+library(readxl)
+library(haven)
+```
+
+## Problem 1
+
+

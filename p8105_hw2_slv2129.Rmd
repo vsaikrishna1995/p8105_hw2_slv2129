@@ -9,8 +9,64 @@ output: github_document
 library(tidyverse)
 library(readxl)
 library(haven)
+library(janitor)
 ```
 
 ## Problem 1
 
+Reading and cleaning the Mr.Trashwheel dataset:
+
+```{r}
+trashwheel_df = 
+  read_xlsx(
+    "C:/Users/Krishna/Desktop/Sem 3/Data Science/Assignment 2/p8105_hw2_slv2129/data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", 
+            range = cell_cols("A:N")) %>%
+  clean_names() %>%
+  drop_na(dumpster) %>%
+  mutate (
+    sports_balls = round(sports_balls),
+    sports_balls = as.integer(sports_balls)
+  )
+```
+
+Reading, cleaning and manipulating the 2017 and 2018 precipitation data sheets:
+
+```{r}
+#2017 Precipitation#
+
+precip2017_df = 
+  read_xlsx("C:/Users/Krishna/Desktop/Sem 3/Data Science/Assignment 2/p8105_hw2_slv2129/data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
+            sheet = "2017 Precipitation",
+            skip = 1) %>%
+  rename(Total_Precipitation_inches = Total) %>%
+  clean_names() %>%
+  drop_na(month) %>%
+  mutate (year = 2017,
+          month = month.name[month]) %>%
+  subset (select = c(3,1,2)) 
+
+#2018 Precipitation#
+
+precip2018_df = 
+  read_xlsx("C:/Users/Krishna/Desktop/Sem 3/Data Science/Assignment 2/p8105_hw2_slv2129/data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
+            sheet = "2018 Precipitation",
+            skip = 1) %>%
+  rename(Total_Precipitation_inches = Total) %>%
+  clean_names() %>%
+  drop_na(month) %>%
+  mutate (year = 2018,
+          month = month.name[month]) %>%
+  subset (select = c(3,1,2))
+
+#Combining 2017 and 2018 datasets#
+precipitation_df = 
+  rbind(precip2017_df, precip2018_df) %>%
+  mutate (month = as.character(month))
+```
+
+Describing the Mr.Trashwheel dataset:
+
+
+
+## Problem 2
 

@@ -62,11 +62,15 @@ precip2018_df =
 precipitation_df = 
   rbind(precip2017_df, precip2018_df) %>%
   mutate (month = as.character(month))
+
+#Finding the median number of sportsballs in 2017#
+x = trashwheel_df %>% filter(year == 2017) %>% select(sports_balls)
+med_sportsballs = median(x[[1]])
 ```
 
 Describing the Mr.Trashwheel dataset:
 
-
+This dataset consists of data related to Mr.Trashwheel trash collector located in Maryland. The trash collected by Mr.Trashwheel is stored in a dumpster. This dataset contains information related to the date, weight of trash, type of trash collected and the number of houses powered. The number of observations recorded in the Mr.Trashwheel and the final precipitation datasets are `r nrow(trashwheel_df)` and `r nrow(precipitation_df)`, respectively. The key variable associated with precipitation dataset is the total_precipitation_inches, which quantifies the amount of precipitation recorded. Based on the data provided above, the total precipitation recorded in 2018 is `r sum(precipitation_df %>% filter(year == 2018) %>% select(total_precipitation_inches))`. The median number of sports balls in a dumpster in 2017 is `r med_sportsballs`. 
 
 ## Problem 2
 

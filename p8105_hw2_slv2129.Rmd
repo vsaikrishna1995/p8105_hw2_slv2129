@@ -113,3 +113,6 @@ What proportion of station entrances / exits without vending allow entrance?\
 
 How many distinct stations serve the A train? Of the stations that serve the A train, how many are ADA compliant?\
 There are `r dist_stations_A_df %>% nrow()` distinct stations that serve the A train. Among these stations, `r ada_comp_A` are ADA compliant. 
+
+## Problem 3
+

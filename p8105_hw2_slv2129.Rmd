@@ -116,3 +116,49 @@ There are `r dist_stations_A_df %>% nrow()` distinct stations that serve the A t
 
 ## Problem 3
 
+Reading, cleaning and manipulating pols-month, a dataset related to the number of national politicians who are democratic or republican at any given time:
+
+```{r}
+pols_month_df = read.csv("C:/Users/Krishna/Desktop/Sem 3/Data Science/Assignment 2/p8105_hw2_slv2129/data/fivethirtyeight_datasets/pols-month.csv") %>% 
+             separate(mon, into = c("year", "month", "day"), sep = "-", convert = T) %>%
+             mutate(month = month.name[month], president = NA,
+                    president = ifelse(prez_gop == 0 & prez_dem == 1, "dem", 
+                                ifelse(prez_gop == 1 & prez_dem == 0, "gop", NA))) %>% 
+             select(-c(day, prez_gop, prez_dem)) %>%
+             clean_names()
+```
+
+Reading, cleaning and manipulating snp, a dataset related to Standard & Poor’s stock market index (S&P):
+
+```{r}
+snp_df = read.csv("C:/Users/Krishna/Desktop/Sem 3/Data Science/Assignment 2/p8105_hw2_slv2129/data/fivethirtyeight_datasets/snp.csv") %>% 
+         separate(date, into = c("day", "month", "year"), sep = "/", convert = T) %>%
+         mutate(month = month.name[month]) %>%
+         select(-day) %>%
+         subset(select = c(year, month, close)) %>%
+         arrange(year, month) %>%
+         clean_names() 
+```
+
+Reading and manipulating unemployment dataset:
+
+```{r}
+unemploy_df = read.csv("C:/Users/Krishna/Desktop/Sem 3/Data Science/Assignment 2/p8105_hw2_slv2129/data/fivethirtyeight_datasets/unemployment.csv") %>%
+              pivot_longer(Jan:Dec, names_to = "month", values_to = "percent_unemployment") %>%
+              mutate(month = match(month, month.abb), month = month.name[month]) %>%
+              clean_names()
+              
+```
+
+Merging snp_df into pols_month_df, and merging unemploy_df into the result:
+
+```{r}
+pols_snp_mergedf = left_join(pols_month_df, snp_df, by = c("year", "month")) 
+final_mergedf = left_join(pols_snp_mergedf, unemploy_df, by = c("year", "month"))
+
+yr_range = final_mergedf %>% select(year) %>% range()
+```
+
+Describing the datasets: 
+
+pols-month is a dataset related to the number of national politicians who are democratic or republican at any given time and snp is a dataset related to Standard & Poor’s stock market index (S&P). The unemployment dataset consists of information related to unemployment percentage with respect to years and months. All the substituent components of these datasets have been appropriately modified prior to the merging step. The merged dataframe consists of `r names(final_mergedf)` variables and has the following dimension (row, columns): `r dim(final_mergedf)`. The data presented in this dataframe is associated with the years between `r yr_range[1]` and `r yr_range[2]`.  
